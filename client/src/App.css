@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+  text-decoration: none;
+}
+
+input,
+input:focus,
+input:active {
+  border: none;
+  outline: 0;
+  background-color: white;
+}

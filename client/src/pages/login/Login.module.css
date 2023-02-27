@@ -1,0 +1,85 @@
+.containerLogin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-size: contain;
+  background-image: url("https://cdn.pixabay.com/photo/2023/02/13/18/00/bird-7787970_960_720.jpg");
+}
+
+.backgroundEsquerda {
+  width: 50%;
+  height: 100%;
+}
+
+.formDireita {
+  background-color: #e2e3e6;
+  border-radius: 5px;
+  opacity: 1;
+  height: 100%;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  background-color: #fdfcfc;
+  flex-direction: column;
+  box-shadow: #181818 5px 5px 15px;
+  justify-content: center;
+
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+}
+
+.formDireita form {
+  width: 90%;
+  padding: 1rem;
+  height: 25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.formDireita form input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid #dddfe2;
+}
+
+.formDireita h1 {
+  width: 90%;
+  display: block;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.formDireita h1::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 50%;
+  border-bottom: 1px solid black;
+}
+
+.formDireita form input[type="submit"],
+.criarConta {
+  font-weight: bold;
+  font-size: 1.25rem;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 70%;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.criarConta {
+  width: 60%;
+  background-color: #42b72a;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 1rem;
+  display: block;
+  text-align: center;
+}
