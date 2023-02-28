@@ -5,6 +5,7 @@ import styles from "../login/Login.module.css";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [nome, setnome] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
 
@@ -19,6 +20,13 @@ const Login = () => {
       <div className={styles.formDireita}>
         <h1>Cadastrar</h1>
         <Form requisicao={requisicao}>
+          <Input
+            type={"text"}
+            value={nome}
+            setValue={setnome}
+            placeholder="Nome"
+          />
+
           <Input
             type={"email"}
             value={email}
