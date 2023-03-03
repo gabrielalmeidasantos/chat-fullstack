@@ -83,3 +83,9 @@
   display: block;
   text-align: center;
 }
+
+.erro {
+  color: red;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
