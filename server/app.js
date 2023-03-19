@@ -5,6 +5,7 @@ const app = express();
 const port = 8080;
 const mongoose = require("mongoose");
 const loginRouter = require("./routes/loginRoute");
+const chatRouter = require("./routes/MensagemRoute");
 
 const db_user = process.env.DB_USER;
 const db_pass = process.env.DB_PASS;
@@ -12,7 +13,9 @@ const db_pass = process.env.DB_PASS;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+
 app.use("/api/", loginRouter);
+app.use("/api/chat", chatRouter);
 
 mongoose
   .connect(

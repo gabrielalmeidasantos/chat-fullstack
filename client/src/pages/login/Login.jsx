@@ -6,20 +6,21 @@ import styles from "./Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../config";
 import Contexto from "../../context/Contexto";
+import Loading from "../../components/loading/Loading";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const [erro, setErro] = React.useState("");
   const [habilitar, seHabilitar] = React.useState(true);
-  const { setToken } = useContext(Contexto);
+  const { setToken, setIdUser } = useContext(Contexto);
   const navigate = useNavigate();
 
   React.useEffect(() => {
     let tokenLocal = localStorage.getItem("token");
     if (tokenLocal) {
       setToken(tokenLocal);
-      console.log("oui");
       setTimeout(() => {
         navigate("/chat");
       }, 1500);
@@ -27,6 +28,7 @@ const Login = () => {
   }, [setToken, navigate]);
 
   async function requisicao(event) {
+    setLoading(true);
     event.preventDefault();
     seHabilitar(() => false);
     let retorno;
@@ -38,7 +40,9 @@ const Login = () => {
       });
 
       setToken(retorno.data.token);
+      setIdUser(retorno.data._id);
       localStorage.setItem("token", retorno.data.token);
+      localStorage.setItem("id", retorno.data._id);
 
       navigate("/chat");
 
@@ -48,6 +52,11 @@ const Login = () => {
     }
 
     seHabilitar(() => true);
+    setLoading(false);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (

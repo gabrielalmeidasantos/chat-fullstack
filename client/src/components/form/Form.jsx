@@ -1,8 +1,11 @@
 import React from "react";
-// import styles from "./Form.module.css";
 
-const Form = ({ children, requisicao }) => {
-  return <form onSubmit={requisicao}>{children}</form>;
+const Form = ({ children, requisicao, ...props }) => {
+  return (
+    <form onSubmit={requisicao} {...props}>
+      {children}
+    </form>
+  );
 };
 
 export default Form;

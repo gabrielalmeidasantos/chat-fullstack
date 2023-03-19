@@ -3,8 +3,31 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const modelUsuario = require("../models/Usuario");
 
+async function validaToken(req, res) {
+  const authHeader = req.headers["authorization"];
+  let token = authHeader && authHeader.split(" "[1]);
+  token = token.toString();
+
+  if (!token) {
+    res.status(401).json({ msg: "acesso negado" });
+  }
+
+  try {
+    const secret = process.env.SECRET;
+    jwt.verify(token, secret);
+    res.status(200).json({ msg: "Token valido" });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ msg: "Token invalido" });
+  }
+}
+
 async function verificaToken(req, res, next) {
   const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    res.status(401).json({ msg: "Token invalido" });
+  }
+
   let token = authHeader && authHeader.split(" "[1]);
   token = token.toString();
 
@@ -24,13 +47,10 @@ async function verificaToken(req, res, next) {
 
 async function listar(req, res) {
   const id = req.params.id;
-  const usuarioExiste = await modelUsuario.findById(id, "-senha");
+  let usuarios = await modelUsuario.find(null, "-senha");
 
-  if (!usuarioExiste) {
-    return res.status(422).json({ msg: "Email já cadastrado" });
-  }
-
-  return res.status(200).json(usuarioExiste);
+  usuarios = usuarios.filter((user) => user._id != id);
+  return res.status(200).json(usuarios);
 }
 
 async function cadastrar(req, res) {
@@ -48,10 +68,12 @@ async function cadastrar(req, res) {
     return res.status(422).json({ msg: "Preencher o campo senha" });
   }
 
-  const usuarioExiste = await modelUsuario.findOne({ email: email });
+  let emailExiste = await modelUsuario.findOne({ email: email });
 
-  if (usuarioExiste) {
-    return res.status(422).json({ msg: "Email já cadastrado" });
+  usuarioExiste = await modelUsuario.findOne({ nome: nome });
+
+  if (usuarioExiste || emailExiste) {
+    return res.status(422).json({ msg: "Usuario já cadastrado" });
   }
 
   const salt = await bcrypt.genSalt(12);
@@ -69,6 +91,12 @@ async function cadastrar(req, res) {
     console.log(error);
     return res.status(500).json({ msg: "Erro no servidor" });
   }
+}
+
+async function user(req, res) {
+  const id = req.params.id;
+  let usuario = await modelUsuario.findById(id, "-senha");
+  return res.status(200).json(usuario);
 }
 
 async function entrar(req, res) {
@@ -103,7 +131,7 @@ async function entrar(req, res) {
       secret
     );
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, _id: usuarioExiste._id });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: "Erro no servidor" });
@@ -112,7 +140,9 @@ async function entrar(req, res) {
 
 module.exports = {
   listar,
+  validaToken,
   verificaToken,
   cadastrar,
   entrar,
+  user,
 };

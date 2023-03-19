@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const {
-  // Listar,
-  //   verificaToken,
+  validaToken,
   cadastrar,
   entrar,
+  verificaToken,
+  listar,
+  user,
 } = require("../controllers/loginController");
 
-// router.get("/usuario/:id", verificaToken, Listar);
+router.get("/users/:id", verificaToken, listar);
+router.get("/user/:id", verificaToken, user);
+router.get("/token", validaToken);
 router.post("/auth/cadastrar", cadastrar);
 router.post("/auth/entrar", entrar);
 

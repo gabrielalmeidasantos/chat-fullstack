@@ -1,0 +1,14 @@
+.pessoa {
+  margin: 0 auto;
+  width: 95%;
+  padding: 1rem;
+  border-bottom: #bfbfbf 1px solid;
+  font-size: 1.1rem;
+  color: #647255;
+  cursor: pointer;
+}
+
+.pessoa:hover {
+  background-color: #f4885b;
+  color: white;
+}

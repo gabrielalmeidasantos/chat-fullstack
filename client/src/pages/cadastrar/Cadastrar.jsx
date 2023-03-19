@@ -1,46 +1,54 @@
-import React, { useContext } from "react";
+import React from "react";
 import axios from "axios";
 import Form from "../../components/form/Form";
 import Input from "../../components/input/Input";
 import styles from "../login/Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import Contexto from "../../context/Contexto";
 import { BASE_URL } from "../../config";
+import Loading from "../../components/loading/Loading";
 
 const Login = () => {
   const [nome, setnome] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [erro, setErro] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const [habilitar, seHabilitar] = React.useState(true);
-  const { setToken } = useContext(Contexto);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+  }, []);
+
   async function requisicao(event) {
+    setLoading(true);
     event.preventDefault();
     seHabilitar(() => false);
-    let retorno;
 
     try {
-      retorno = await axios.post(`${BASE_URL}/api/auth/cadastrar`, {
+      await axios.post(`${BASE_URL}/api/auth/cadastrar`, {
         nome,
         email,
         senha,
       });
 
-      retorno = await axios.post(`${BASE_URL}/api/auth/entrar`, {
+      await axios.post(`${BASE_URL}/api/auth/entrar`, {
         email,
         senha,
       });
 
-      setToken(retorno.data.token);
-      localStorage.setItem("token", retorno.data.token);
-      navigate("/chat");
+      navigate("/");
     } catch (error) {
       setErro(() => error.response.data.msg);
     }
 
     seHabilitar(() => true);
+    setLoading(false);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (

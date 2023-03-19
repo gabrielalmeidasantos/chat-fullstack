@@ -1,0 +1,24 @@
+.enviado,
+.recebido {
+  width: 100%;
+  display: flex;
+  padding: 1rem 2rem;
+}
+
+.enviado p,
+.recebido p {
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
+.enviado {
+  justify-content: end;
+}
+
+.enviado p {
+  background-color: #70dbe5;
+}
+
+.recebido p {
+  background-color: #8deabb;
+}
