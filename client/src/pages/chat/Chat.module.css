@@ -21,7 +21,7 @@
 
 .esquerda {
   width: 30%;
-  height: 80vh;
+  min-height: 80vh;
   background-color: #ffffff;
   position: relative;
 }
@@ -55,6 +55,9 @@
   cursor: pointer;
   font-size: 1rem;
   color: red;
+  background-color: #ffffff;
+  position: absolute;
+  bottom: 0;
 }
 
 .direita > p {
