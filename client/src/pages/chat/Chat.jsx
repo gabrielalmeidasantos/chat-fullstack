@@ -18,7 +18,7 @@ const Chat = () => {
   const [mensagens, setMensagens] = React.useState(false);
   const [destinatario, setDestinatario] = React.useState();
   const [dadosDestinatario, setDadosDestinatario] = React.useState(null);
-  const { setToken, token } = useContext(Contexto);
+  const { setToken } = useContext(Contexto);
   const containerChat = React.useRef(null);
   const navigate = useNavigate();
 
@@ -41,7 +41,6 @@ const Chat = () => {
       });
     if (containerChat.current) {
       containerChat.current.scrollTop = containerChat.current.scrollHeight;
-      console.table(containerChat.current);
     }
     setLoading(false);
   }
@@ -61,14 +60,14 @@ const Chat = () => {
     const tokenLocal = localStorage.getItem("token");
     const idLocal = localStorage.getItem("id");
 
-    if (!mensagem || mensagem.length == 0) {
+    if (!mensagem || mensagem.length === 0) {
       return;
     }
 
     try {
       setLoading(true);
 
-      const retorno = await axios.post(
+      await axios.post(
         `${BASE_URL}/api/chat/add`,
         {
           mensagem,
@@ -182,6 +181,7 @@ const Chat = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}></header>
+      <header className={styles.falso_header}></header>
       <main className={styles.main}>
         <div className={styles.esquerda}>
           <div className={styles.perfil}>{usuario.nome}</div>
@@ -192,6 +192,7 @@ const Chat = () => {
                 nome={user.nome}
                 id={user._id}
                 selecionarUsuario={selecionarUsuario}
+                usuarioAtivo={user._id === destinatario?.id}
               />
             ))}
           </div>
@@ -200,6 +201,11 @@ const Chat = () => {
           </p>
         </div>
         <div className={styles.direita}>
+          {!destinatario && !dadosDestinatario && (
+            <div className={styles.selecione_conversa}>
+              Nenhuma conversa selecionada
+            </div>
+          )}
           {destinatario && dadosDestinatario && (
             <>
               <p>{dadosDestinatario.nome}</p>
@@ -208,7 +214,7 @@ const Chat = () => {
                   {mensagens &&
                     mensagens?.map((msg) => (
                       <Mensagem
-                        enviado={msg.remetente != localStorage.getItem("id")}
+                        enviado={msg.remetente !== localStorage.getItem("id")}
                         mensagem={msg.mensagem}
                         key={msg._id}
                       />
