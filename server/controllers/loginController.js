@@ -70,7 +70,7 @@ async function cadastrar(req, res) {
 
   let emailExiste = await modelUsuario.findOne({ email: email });
 
-  usuarioExiste = await modelUsuario.findOne({ nome: nome });
+  let usuarioExiste = await modelUsuario.findOne({ nome: nome });
 
   if (usuarioExiste || emailExiste) {
     return res.status(422).json({ msg: "Usuario já cadastrado" });

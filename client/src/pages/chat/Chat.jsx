@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
+import socket from "socket.io-client";
 import Pessoa from "../../components/pessoa/Pessoa";
 import styles from "./Chat.module.css";
 import Contexto from "../../context/Contexto";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../config";
+import { BASE_URL, BASE_URL_SOCKET } from "../../config";
 import Mensagem from "../../components/mensagem/Mensagem";
 import Input from "../../components/input/Input";
 import Loading from "../../components/loading/Loading";
 import Form from "../../components/form/Form";
+import { useParams } from "react-router-dom";
 
 const Chat = () => {
   const [mensagem, setMensagem] = React.useState("");
@@ -21,6 +23,13 @@ const Chat = () => {
   const { setToken } = useContext(Contexto);
   const containerChat = React.useRef(null);
   const navigate = useNavigate();
+  let { userParam } = useParams();
+
+  React.useEffect(() => {
+    if (containerChat.current) {
+      containerChat.current.scrollTop = containerChat.current.scrollHeight;
+    }
+  }, [mensagens]);
 
   function atualizarMensagens(idLocal, idDestinatario, token) {
     setLoading(true);
@@ -39,20 +48,31 @@ const Chat = () => {
       .finally(() => {
         setLoading(false);
       });
-    if (containerChat.current) {
-      containerChat.current.scrollTop = containerChat.current.scrollHeight;
-    }
-    setLoading(false);
   }
 
-  function selecionarUsuario(event) {
+  async function selecionarUsuario(event) {
+    navigate(`/chat/${event.target.id}`);
+
+    const io = await socket.connect(BASE_URL_SOCKET);
+    // io.emit("select");
+    io.emit("addUser", localStorage.getItem("id"));
+    io.emit("addConex", {
+      remetente: localStorage.getItem("id"),
+      destinatario: event.target.id,
+    });
+
     setMensagens(() => "");
     setDestinatario({ ...destinatario, id: event.target.id });
     setMensagem(() => "");
     const idLocal = localStorage.getItem("id");
     const tokenLocal = localStorage.getItem("token");
-
     atualizarMensagens(idLocal, event.target.id, tokenLocal);
+
+    io.on("getMessage", (data) => {
+      if (userParam === data.remetente) {
+        atualizarMensagens(idLocal, userParam, tokenLocal);
+      }
+    });
   }
 
   async function enviarMensagem(e) {
@@ -80,6 +100,13 @@ const Chat = () => {
           },
         }
       );
+
+      const io = await socket.connect(BASE_URL_SOCKET);
+      io.emit("sendMessage", {
+        mensagem,
+        remetente: idLocal,
+        destinatario: destinatario.id,
+      });
     } catch (error) {
       console.log(error.response.data.msg);
     }
@@ -209,12 +236,12 @@ const Chat = () => {
           {destinatario && dadosDestinatario && (
             <>
               <p>{dadosDestinatario.nome}</p>
-              <div className={styles.conversas} ref={containerChat}>
+              <div className={styles.conversas} ref={containerChat} id="scroll">
                 <div>
                   {mensagens &&
                     mensagens?.map((msg) => (
                       <Mensagem
-                        enviado={msg.remetente !== localStorage.getItem("id")}
+                        enviado={msg.remetente === localStorage.getItem("id")}
                         mensagem={msg.mensagem}
                         key={msg._id}
                       />

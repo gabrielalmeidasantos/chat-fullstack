@@ -3,22 +3,24 @@
   width: 100%;
   display: flex;
   padding: 1rem 2rem;
+  justify-content: flex-end;
 }
 
 .enviado p,
 .recebido p {
   padding: 0.5rem;
   border-radius: 10px;
+  color: #fff;
 }
 
-.enviado {
-  justify-content: end;
+.recebido {
+  justify-content: flex-start;
 }
 
 .enviado p {
-  background-color: #d6d6d6;
+  background-color: #42b72a;
 }
 
 .recebido p {
-  background-color: #d6d6d6;
+  background-color: #5b89c5;
 }

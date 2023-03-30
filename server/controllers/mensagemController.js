@@ -1,7 +1,5 @@
 const Mensagem = require("../models/Mensagem");
 
-//add
-
 async function adicionarMensagem(req, res) {
   const envio = new Date().getTime();
   const { mensagem, remetente, destinatario } = req.body;
@@ -21,7 +19,6 @@ async function adicionarMensagem(req, res) {
   }
 }
 
-//get
 async function listarMensagem(req, res) {
   const { remetente, destinatario } = req.params;
 

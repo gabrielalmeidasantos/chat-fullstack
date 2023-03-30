@@ -8,8 +8,8 @@ const Pessoa = ({ nome, selecionarUsuario, id, usuarioAtivo }) => {
       onClick={selecionarUsuario}
       id={id}
       style={{
-        backgroundColor: usuarioAtivo && "#d6d6d6",
-        color: usuarioAtivo && "#000",
+        backgroundColor: usuarioAtivo && "#5b89c5",
+        color: usuarioAtivo && "#fff",
       }}
     >
       {nome}

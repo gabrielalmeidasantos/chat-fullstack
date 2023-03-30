@@ -28,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/cadastrar" element={<Cadastrar />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:userParam" element={<Chat />} />
           <Route path="/*" element={<Login />} />
         </Routes>
       </BrowserRouter>
